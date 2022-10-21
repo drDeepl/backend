@@ -1,0 +1,39 @@
+stages:
+  - build
+  - deploy
+
+build:
+  image: docker
+  stage: build
+  services:
+    - docker:dind
+  variables:
+    IMAGE_TAG: $CI_REGISTRY_IMAGE/image:$CI_COMMIT_REF_SLUG
+  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker build -t $IMAGE_TAG --build-arg GLOBAL_TOKEN_USERNAME="$GLOBAL_TOKEN_USERNAME" --build-arg GLOBAL_TOKEN_VALUE="$GLOBAL_TOKEN_VALUE" .
+    - docker push $IMAGE_TAG
+  only:
+    - master
+
+deploy-dev:
+  stage: deploy
+  image: alpine
+  variables:
+    IMAGE_TAG: $CI_REGISTRY_IMAGE/image:$CI_COMMIT_REF_SLUG
+    DEPLOY_PATH: /home/hjklvfr/hub/docker-compose.yml
+  environment:
+    name: staging
+    url: https://api.economic.fisting.tech
+  script:
+    - chmod og= $ID_RSA
+    - apk update && apk add openssh-client
+    - ssh -i $ID_RSA -o StrictHostKeyChecking=no root@$SERVER_HOST "docker-compose -f $DEPLOY_PATH stop economic-api"
+    - ssh -i $ID_RSA -o StrictHostKeyChecking=no root@$SERVER_HOST "docker-compose -f $DEPLOY_PATH rm economic-api"
+    - ssh -i $ID_RSA -o StrictHostKeyChecking=no root@$SERVER_HOST "docker pull $IMAGE_TAG"
+    - ssh -i $ID_RSA -o StrictHostKeyChecking=no root@$SERVER_HOST "docker-compose -f $DEPLOY_PATH run --rm economic-api python3 manage.py collectstatic --noinput"
+    - ssh -i $ID_RSA -o StrictHostKeyChecking=no root@$SERVER_HOST "docker-compose -f $DEPLOY_PATH run --rm economic-api python3 manage.py migrate"
+    - ssh -i $ID_RSA -o StrictHostKeyChecking=no root@$SERVER_HOST "docker-compose -f $DEPLOY_PATH up -d economic-api"
+#    - ssh $DEPLOY_USER@$DEPLOY_HOST "cd hub && docker-compose stop vault"
+  only:
+    - master

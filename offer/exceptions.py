@@ -1,0 +1,3 @@
+
+class OfferStateIsNotActiveException(Exception):
+    pass

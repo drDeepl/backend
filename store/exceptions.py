@@ -1,0 +1,3 @@
+
+class TeamHaveNot(Exception):
+    pass

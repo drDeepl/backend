@@ -1,0 +1,20 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+
+[packages]
+django-ninja = "==0.16.1"
+django-ninja-extra = "==0.13.8"
+django-ninja-jwt = "==5.1.5"
+six = "==1.16.0"
+uvicorn = "==0.16.0"
+psycopg2 = "==2.9.2"
+typing-extensions = "==4.0.1"
+"backports.zoneinfo" = "==0.2.1"
+django-cors-headers = "*"
+
+[requires]
+python_version = "3.8"
