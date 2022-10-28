@@ -40,9 +40,13 @@ class SaleOfferController(ControllerBase):
 class PurchaseOfferController(ControllerBase):
     @http_post('/place', response=PurchaseOfferOut)
     def place_offer(self, payload: PurchaseOfferPlace):
+        
         current_user = self.context.request.auth
         product = get_object_or_404(Product, id=payload.product_id)
-        PurchaseOffer.place(current_user, product, payload.count, payload.price)
+        
+        # FIX add return 
+        return PurchaseOffer.place(current_user, product, payload.count, payload.price)
+        
 
     @http_get('/list', response=List[PurchaseOfferOut])
     @pagination.paginate

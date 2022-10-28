@@ -72,7 +72,11 @@ class PurchaseOffer(Offer):
             count: int,
             price: Decimal
     ):
+
         check_role(customer, Role.CUSTOMER)
+        print("PURCHASE OFFER PLACE")
+        print("PURCHASE OFFER PLACE")
+        print("PURCHASE OFFER PLACE")
 
         return PurchaseOffer.objects.create(
             trader=customer,

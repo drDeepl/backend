@@ -26,7 +26,7 @@ def add_product_kit(team: Team, product_kit: ProductKit):
 @transaction.atomic
 def get_all_product_kits(team: Team) -> List[StoreProductKitOut]:
     print("get_all_product_kits", team)
-    check_products_created(team)
+    # check_products_created(team)
     
     all_product_kits: List[ProductKit] = list(map(lambda x: x.product_kit, TeamProductKit.objects.filter(team=team)))
     counter: Dict[ProductKit, int] = dict(Counter(all_product_kits))
@@ -37,6 +37,9 @@ def get_all_product_kits(team: Team) -> List[StoreProductKitOut]:
 @transaction.atomic
 def check_products_created(team: Team):
     team_product_kits: List[TeamProductKit] = TeamProductKit.objects.filter(team=team)
+    
+    print("CHECK PRODUCTS CREATED")
+    
     for team_product_kit in team_product_kits:
         # INFO: заменил datetime.now() на timezone.now()
         # INFO: заменил >= на <=
@@ -51,7 +54,7 @@ def check_products_created(team: Team):
 
 @transaction.atomic
 def get_all_products(team: Team) -> List[StoreProductOut]:
-    check_products_created(team)
+    # check_products_created(team)
 
     all_products = list(map(lambda x: x.product, TeamProduct.objects.filter(team=team)))
     counter = dict(Counter(all_products))
