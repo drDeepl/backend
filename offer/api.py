@@ -56,6 +56,8 @@ class PurchaseOfferController(ControllerBase):
     @http_post('/acquire', response=PurchaseDoneOut)
     def acquire(self, offer_id: int):
         current_user: User = self.context.request.auth
+        
         check_role(current_user, Role.PLAYER)
         offer = get_object_or_404(PurchaseOffer, id=offer_id)
-        acquire_purchase_offer(current_user.team, offer)
+       
+        return acquire_purchase_offer(current_user.team, offer)

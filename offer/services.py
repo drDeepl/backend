@@ -31,13 +31,19 @@ def acquire_sale_offer(team: Team, offer: SaleOffer) -> SaleDone:
 
 @transaction.atomic
 def acquire_purchase_offer(team: Team, offer: PurchaseOffer) -> PurchaseDone:
-    customer = User.objects.get(user=offer.trader)
+    customer = User.objects.get(id=offer.trader.id)
+    
     account_transaction = transfer(customer.account, team.account, offer.price)
     offer.state = OfferState.DONE
-    purchase = PurchaseDone.objects.create(offer, account_transaction)
+    purchase = PurchaseDone.objects.create(offer=offer, transaction=account_transaction)
     offer.save()
-    remove_products(team, offer.product, offer.count)
-
+    
+    remove_products(team=team, product=offer.product, count=offer.count)
+    print()
+    print()
+    print(purchase)
+    print()
+    print()
     return purchase
 
 # todo add background task (product_kit -> products)
