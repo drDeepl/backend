@@ -44,9 +44,26 @@ class ProductController(ControllerBase):
                  permissions=[permissions.IsAuthenticated], auth=JWTAuth())
     def delete_product(self, product_id: int):
         check_admin(self.context)
+        if(product_id == -1):
+            products = Product.objects.all()
+            for product in products:
+                product.delete()
 
-        product = get_object_or_404(Product, id=product_id)
-        product.delete()
+        else:
+            product = get_object_or_404(Product, id=product_id)
+            product.delete()
+        return {"success": True}
+
+
+    @http_delete('/products/all/{flag}',
+                 permissions=[permissions.IsAuthenticated], auth=JWTAuth())
+    def delete_products(self, flag: int):
+        
+        if(flag):
+            products = Product.objects.all()
+            for product in products:
+                product.delete()
+                
         return {"success": True}
 
 
@@ -55,8 +72,8 @@ class ProductKitController(ControllerBase):
     @http_post('/product-kits', response=ProductKitOut, auth=JWTAuth())
     def create_product_kit(self, payload: ProductKitIn):  # todo add handler wrong product id IntegrityError
         # check_admin(self.context)
-
         product_kit = ProductKit.objects.create(**payload.dict())
+
         return product_kit
 
     @http_get('/product-kits/{product_kit_id}', response=ProductKitOut)
