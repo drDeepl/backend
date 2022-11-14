@@ -81,6 +81,25 @@ class UserController(ControllerBase):
         user.delete()
         return {"success": True}
 
+    @http_delete('users/delete/{flag}',
+                 permissions=[permissions.IsAuthenticated], auth=JWTAuth())
+    def delete_users(self, flag: int):
+        check_admin(self.context)
+        if(flag):
+            users = User.objects.filter(is_superuser=False)
+            for user in users:
+                user.delete()
+            return {"success": True}
+        else:
+            return {"success": False}
+        
+        
+        # user = get_object_or_404(User, id=user_id)
+        # user.delete()
+        
+
+
+
     @http_get('roles', response=List[str])
     def get_roles(self):
         return [x.value for x in Role]
