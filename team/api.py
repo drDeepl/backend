@@ -54,6 +54,19 @@ class TeamController(ControllerBase):
         team.delete()
         return {"success": True}
 
+    @http_delete('teams-delete/{flag}')
+    def remove_teams(self, flag: int):
+        check_admin(self.context)
+        
+        if(flag):
+            teams = Team.objects.all()
+            print(teams)
+            for team in teams:
+                team.delete()
+            return {"success": True}
+        else:
+            return {"success": False}
+
     @http_put('teams/', response=Detail(status_code=status.HTTP_204_NO_CONTENT))
     def move_player(self, payload: PlayerTeamSchema):
         check_admin(self.context)
