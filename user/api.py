@@ -92,12 +92,6 @@ class UserController(ControllerBase):
             return {"success": True}
         else:
             return {"success": False}
-        
-        
-        # user = get_object_or_404(User, id=user_id)
-        # user.delete()
-        
-
 
 
     @http_get('roles', response=List[str])
