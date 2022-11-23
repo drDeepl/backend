@@ -7,6 +7,7 @@ from ninja_jwt.authentication import JWTAuth
 from store.schemas import StoreProductOut, StoreProductKitOut
 from store.services import get_all_products, get_all_product_kits,check_products_created
 from user.models import User
+from store.models import TeamProduct, TeamProductKit
 from user.utils import check_admin
 
 
@@ -36,13 +37,28 @@ class StoreController(ControllerBase):
 
         return get_all_product_kits(team)
 
-    # FIX: Создал отдельный запрос для проверки готовности продуктов
-    @http_get('{team_id}/product-kits/check')
-    def check_created_products(self, team_id: int):
+    @http_get('{team_id}/product-kits/check/{product_kit_id}')
+    def check_created_products(self, team_id: int, product_kit_id: int):
         current_user: User = self.context.request.auth
         team = current_user.team
         if team.id != team_id:
             
             check_admin(self.context)
+        team_product_kit = TeamProductKit.objects.filter(product_kit=product_kit_id)[0]
+        
+        TeamProduct.objects.create(team=team_product_kit.team, product=team_product_kit.product_kit.product)
+        team_product_kit.delete()
+        # return check_products_created(team)
 
-        return check_products_created(team)
+    # FIX: Создал отдельный запрос для проверки готовности продуктов
+    # @http_get('{team_id}/product-kits/check')
+    # def check_created_products(self, team_id: int):
+    #     current_user: User = self.context.request.auth
+    #     team = current_user.team
+    #     if team.id != team_id:
+            
+    #         check_admin(self.context)
+
+        # return check_products_created(team)
+
+    
