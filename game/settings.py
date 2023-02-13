@@ -19,7 +19,6 @@ DATA_DIR = os.path.dirname(os.path.dirname(__file__))
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
@@ -36,10 +35,10 @@ CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_HEADERS = ['*']
 CORS_ALLOW_METHODS = list(default_methods)
 
-
 # Application definition
 
 INSTALLED_APPS = [
+    # 'daphne',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -53,6 +52,8 @@ INSTALLED_APPS = [
     'store.apps.StoreConfig',
     'user.apps.UserConfig',
     'team.apps.TeamConfig',
+
+    'channels',
 
     'ninja_extra',
     'ninja_jwt',
@@ -90,15 +91,19 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'game.wsgi.application'
-
+ASGI_APPLICATION = 'game.asgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 DATABASES = {
-     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+    "default": {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'economic',
+        'USER': 'economic',
+        'PASSWORD': 'AkmaE4kVMrwjTnY4',
+        'HOST': 'fisting.tech',
+        'ATOMIC_REQUESTS': True,
     }
     # "default": {
     #     'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -109,7 +114,6 @@ DATABASES = {
     #     'ATOMIC_REQUESTS': True,
     # }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
@@ -129,7 +133,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
@@ -142,7 +145,6 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
@@ -161,9 +163,7 @@ STATICFILES_DIRS = (
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-
 AUTH_USER_MODEL = 'user.user'
-
 
 NINJA_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
