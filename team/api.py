@@ -18,7 +18,8 @@ class TeamController(ControllerBase):
     @http_get('teams', response=List[TeamOutSchema])
     @pagination.paginate
     def get_teams(self):
-        qs = Team.objects.all()
+        qs = [ i for i in Team.objects.all()]
+                
         return qs
 
     @http_get('teams/{team_id}', response=TeamOutSchema)

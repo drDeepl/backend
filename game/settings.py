@@ -39,6 +39,11 @@ CORS_ALLOW_METHODS = list(default_methods)
 
 INSTALLED_APPS = [
     # 'daphne',
+     'daphne',
+     "channels",
+     'ninja_extra',
+     'ninja_jwt',
+     'corsheaders',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -53,12 +58,7 @@ INSTALLED_APPS = [
     'user.apps.UserConfig',
     'team.apps.TeamConfig',
 
-    'channels',
-
-    'ninja_extra',
-    'ninja_jwt',
-
-    'corsheaders',
+   
 ]
 
 MIDDLEWARE = [
