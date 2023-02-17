@@ -36,7 +36,8 @@ class SaleOfferController(ControllerBase):
 
     @http_get('/list', response=List[SaleOfferOut])
     def list_offers(self):
-        return find_active_sale_offers()
+        offers_sale = find_active_sale_offers()
+        return offers_sale
 
     @http_post('/acquire', response=SaleDoneOut)
     def acquire(self, offer_id: int):

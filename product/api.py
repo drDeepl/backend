@@ -9,6 +9,7 @@ from ninja_jwt.authentication import JWTAuth
 from product.models import Product, ProductKit
 from product.schemas import ProductOut, ProductIn, ProductKitOut, ProductKitIn
 from user.utils import check_admin
+from ninja.pagination import paginate
 
 
 @api_controller('', tags=['Product'])
@@ -25,7 +26,7 @@ class ProductController(ControllerBase):
         return product
 
     @http_get('/products', response=List[ProductOut])
-    @pagination.paginate
+    @paginate
     def list_products(self):
         qs = Product.objects.all()
         return qs
@@ -82,7 +83,7 @@ class ProductKitController(ControllerBase):
         return product_kit
 
     @http_get('/product-kits', response=List[ProductKitOut])
-    @pagination.paginate
+    @paginate
     def list_products(self):
         qs = ProductKit.objects.all()
         return qs

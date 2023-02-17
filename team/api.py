@@ -5,6 +5,7 @@ from ninja_extra import ControllerBase, api_controller, http_put, permissions, s
     pagination
 from ninja_extra.controllers import Detail
 from ninja_jwt.authentication import JWTAuth
+from ninja.pagination import paginate
 
 from team.models import Team
 from team.schemas import CreateTeamSchema, TeamOutSchema, PlayerTeamSchema
@@ -16,7 +17,7 @@ from user.utils import check_admin
 @api_controller('/', tags=['Team'], permissions=[permissions.IsAuthenticated], auth=JWTAuth())
 class TeamController(ControllerBase):
     @http_get('teams', response=List[TeamOutSchema])
-    @pagination.paginate
+    @paginate
     def get_teams(self):
         qs = [ i for i in Team.objects.all()]
                 

@@ -12,6 +12,7 @@ from team.models import Team
 from user.models import User, Role
 from user.schemas import UserOut, CreateUserSchema, UpdateUserSchema
 from user.utils import check_admin
+from ninja.pagination import paginate
 
 
 @api_controller('/', tags=['User'])
@@ -52,7 +53,7 @@ class UserController(ControllerBase):
         return user
 
     @http_get('users', response=List[UserOut], permissions=[permissions.IsAuthenticated], auth=JWTAuth())
-    @pagination.paginate
+    @paginate
     def list_users(self):
         check_admin(self.context)
 
