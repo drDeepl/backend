@@ -79,13 +79,15 @@ class PurchaseOfferController(ControllerBase):
         return find_active_purchase_offers()
 
     @http_post('/acquire', response=PurchaseDoneOut)
-    def acquire(self, offer_id: int):
+    def acquire(self, offer_id: int, team_id: int):
         current_user: User = self.context.request.auth
-
-        check_role(current_user, Role.PLAYER)
+        
+        check_role(current_user, Role.MANUFACTURER)
         offer = get_object_or_404(PurchaseOffer, id=offer_id)
 
-        result = acquire_purchase_offer(current_user.team, offer)
+        # BEFORE result = acquire_purchase_offer(current_user.team, offer)
+        result = acquire_purchase_offer(team_id, offer)
+        
 
         channel_layer = get_channel_layer()
         async_to_sync(channel_layer.group_send)(
