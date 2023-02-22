@@ -29,7 +29,7 @@ class SaleOfferController(ControllerBase):
         channel_layer = get_channel_layer()
         async_to_sync(channel_layer.group_send)(
             'players',
-            {'type': 'acquiredSaleOffer', 'id': result.id}
+            {'type': 'place.sale.offer', 'id': result.id}
         )
 
         return result
@@ -50,7 +50,7 @@ class SaleOfferController(ControllerBase):
         channel_layer = get_channel_layer()
         async_to_sync(channel_layer.group_send)(
             'players',
-            {'type': 'acquiredSaleOffer', 'id': offer_id}
+            {'type': 'acquired.sale.offer', 'id': offer_id}
         )
 
         return result
@@ -68,7 +68,7 @@ class PurchaseOfferController(ControllerBase):
         channel_layer = get_channel_layer()
         async_to_sync(channel_layer.group_send)(
             'players',
-            {'type': 'placedPurchaseOffer', 'id': result.id}
+            {'type': 'place.purchase.offer', 'id': result.id}
         )
 
         # FIX add return 
@@ -92,7 +92,7 @@ class PurchaseOfferController(ControllerBase):
         channel_layer = get_channel_layer()
         async_to_sync(channel_layer.group_send)(
             'players',
-            {'type': 'acquiredPurchaseOffer', 'id': offer_id}
+            {'type': 'acquired.purchase.offer', 'id': offer_id}
         )
 
         return result

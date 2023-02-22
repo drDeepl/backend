@@ -165,3 +165,9 @@ AUTH_USER_MODEL = 'user.user'
 NINJA_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
 }
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer"
+    }
+}
