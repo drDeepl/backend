@@ -37,7 +37,7 @@ WORKDIR /code
 # Copy only requirements, to cache them in docker layer
 COPY ./Pipfile.lock ./Pipfile /code/
 
-RUN pip3 install uvicorn meinheld psycopg2
+RUN pip3 install uvicorn meinheld psycopg2 zoneinfo
 
 # Project initialization:
 RUN pipenv install --system --deploy --ignore-pipfile
