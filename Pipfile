@@ -24,7 +24,7 @@ typing-extensions = "==4.4.0"
 django-cors-headers = "==3.13.0"
 six = "==1.16.0"
 django-snitch = "==2.3.0"
-channels = {extras = ["daphne"], version = "*"}
+channels = "==4.0.0"
 
 [requires]
 python_version = "3.8"
