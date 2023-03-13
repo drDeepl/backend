@@ -9,16 +9,16 @@ from store.services import get_all_products, get_all_product_kits,check_products
 from user.models import User
 from store.models import TeamProduct, TeamProductKit
 from user.utils import check_admin
-
+from ninja.pagination import paginate
 
 @api_controller('/store', tags=['Store'], permissions=[permissions.IsAuthenticated], auth=JWTAuth())
 class StoreController(ControllerBase):
     @http_get('{team_id}/products/list', response=List[StoreProductOut])
-    @pagination.paginate
+    @paginate
     def list_products(self, team_id: int):
         current_user: User = self.context.request.auth
         team = current_user.team
-
+        
         # if team.id != team_id:
         #     print("CHECK CURRENT TEAM")
         #     # check_admin(self.context)
@@ -28,7 +28,7 @@ class StoreController(ControllerBase):
         return get_all_products(team_id)
 
     @http_get('{team_id}/product-kits/list', response=List[StoreProductKitOut])
-    @pagination.paginate
+    @paginate
     def list_product_kits(self, team_id: int):
         current_user: User = self.context.request.auth
         team = current_user.team

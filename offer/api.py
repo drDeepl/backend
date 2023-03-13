@@ -15,6 +15,7 @@ from offer.services import find_active_sale_offers, acquire_sale_offer, find_act
 from product.models import ProductKit, Product
 from user.models import User, Role
 from user.utils import check_role
+from team.models import Team
 
 
 @api_controller('/offers/sale', tags=['Offer'], permissions=[permissions.IsAuthenticated], auth=JWTAuth())
@@ -40,13 +41,12 @@ class SaleOfferController(ControllerBase):
         return offers_sale
 
     @http_post('/acquire', response=SaleDoneOut)
-    def acquire(self, offer_id: int):
+    def acquire(self, offer_id: int, team_id: int):
         current_user: User = self.context.request.auth
-        check_role(current_user, Role.PLAYER)
+        check_role(current_user, Role.MANUFACTURER) # DEFAULT: PLAYER
         offer = get_object_or_404(SaleOffer, id=offer_id)
-
-        result = acquire_sale_offer(current_user.team, offer)
-
+        team = get_object_or_404(Team, id=team_id)
+        result = acquire_sale_offer(team, offer)
         channel_layer = get_channel_layer()
         async_to_sync(channel_layer.group_send)(
             'players',
@@ -82,7 +82,7 @@ class PurchaseOfferController(ControllerBase):
     def acquire(self, offer_id: int, team_id: int):
         current_user: User = self.context.request.auth
         
-        check_role(current_user, Role.MANUFACTURER)
+        check_role(current_user, Role.CUSTOMER) # DEFAULT: MANUFACTURER
         offer = get_object_or_404(PurchaseOffer, id=offer_id)
 
         # BEFORE result = acquire_purchase_offer(current_user.team, offer)
