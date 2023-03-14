@@ -10,7 +10,7 @@ from ninja_jwt.authentication import JWTAuth
 from account.services import create_account
 from team.models import Team
 from user.models import User, Role
-from user.schemas import UserOut, CreateUserSchema, UpdateUserSchema
+from user.schemas import UserOut, UserNameOut, CreateUserSchema, UpdateUserSchema
 from user.utils import check_admin
 from ninja.pagination import paginate
 
@@ -58,6 +58,18 @@ class UserController(ControllerBase):
         check_admin(self.context)
 
         qs = User.objects.all()
+        return qs
+    
+
+    @http_get('users-names-customer', response=List[UserNameOut], permissions=[permissions.IsAuthenticated], auth=JWTAuth())
+    @paginate
+    def list_names_customer(self):
+        qs = User.objects.filter(role=Role.CUSTOMER)
+        print()
+        print()
+        print()
+        print()
+        print(qs)
         return qs
 
     @http_put('users/{user_id}', response=UserOut, permissions=[permissions.IsAuthenticated], auth=JWTAuth())

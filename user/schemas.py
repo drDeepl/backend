@@ -15,6 +15,11 @@ class UserOut(ModelSchema):
         ]
 
 
+class UserNameOut(ModelSchema):
+    class Config:
+        model = User
+        model_fields = ["id", "username",]
+
 class UpdateUserSchema(ModelSchema):
     team_id: int
 
