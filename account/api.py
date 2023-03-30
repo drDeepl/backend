@@ -9,7 +9,7 @@ from ninja_jwt.authentication import JWTAuth
 from account.models import Account, Transaction
 from account.schemas import TransactionOut, AccountAmountSchema, TransferSchema, AccountOut
 from account.services import emit, absorb, transfer
-from user.models import User
+from user.models import User, Role
 from user.utils import check_admin
 
 
@@ -51,8 +51,9 @@ class AccountController(ControllerBase):
     @http_get('accounts/{account_id}', response=AccountOut)
     def get_account(self, account_id: int):
         user: User = self.context.request.auth
-        if user.team.account_id != account_id:
-            check_admin(self.context)
+        if  user.role != Role.MANUFACTURER:
+                if user.team.account_id != account_id:
+                    check_admin(self.context)
 
         account = get_object_or_404(Account, id=account_id)
         return account

@@ -1,14 +1,15 @@
 from typing import List
 
 from django.shortcuts import get_object_or_404
-from ninja_extra import permissions, http_post, http_get, pagination, http_put, http_delete, status
+from ninja_extra import permissions, http_post, http_get, pagination, http_put, http_delete, status,route
 from ninja_extra.controllers import Detail
 from ninja_extra.controllers.base import api_controller, ControllerBase
 from ninja_jwt.authentication import JWTAuth
 
 from product.models import Product, ProductKit
 from product.schemas import ProductOut, ProductIn, ProductKitOut, ProductKitIn
-from user.utils import check_admin
+from user.utils import check_admin, check_role
+from user.models import User, Role
 from ninja.pagination import paginate
 
 
@@ -44,7 +45,8 @@ class ProductController(ControllerBase):
     @http_delete('/products/{product_id}',
                  permissions=[permissions.IsAuthenticated], auth=JWTAuth())
     def delete_product(self, product_id: int):
-        check_admin(self.context)
+        current_user: User = self.context.request.auth
+        check_role(current_user, Role.MANUFACTURER)
         if(product_id == -1):
             products = Product.objects.all()
             for product in products:
@@ -100,7 +102,12 @@ class ProductKitController(ControllerBase):
 
     @http_delete('/product-kits/{product_id}', auth=JWTAuth())
     def delete_product_kit(self, product_id: int):
-        check_admin(self.context)
+        for _ in range(0,5):
+            print()
+        current_user: User = self.context.request.auth
+        
+        print(current_user.role)
+        check_role(current_user, Role.MANUFACTURER)
 
         product_kit = get_object_or_404(ProductKit, id=product_id)
         product_kit.delete()

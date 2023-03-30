@@ -6,15 +6,16 @@ from offer.models import PurchaseDone, SaleDone, PurchaseOffer, SaleOffer
 class SaleOfferOut(ModelSchema):
     class Config:
         model = SaleOffer
-        model_fields = ['id', 'trader', 'price', 'timestamp', 'state', 'product_kit']
+        model_fields = ['id', 'trader', 'team', 'price', 'timestamp', 'state', 'product_kit']
 
 
 class SaleOfferPlace(ModelSchema):
     product_kit_id: int
+    team_id: int
 
     class Config:
         model = SaleOffer
-        model_fields = ['price']
+        model_fields = ['price', 'team']
 
 
 class PurchaseOfferOut(ModelSchema):

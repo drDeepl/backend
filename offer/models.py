@@ -8,6 +8,7 @@ from account.models import Transaction
 from offer.exceptions import OfferStateIsNotActiveException
 from product.models import ProductKit, Product
 from user.models import User, Role
+from team.models import Team # // FIX: ADDED
 from user.utils import check_role
 
 
@@ -43,11 +44,13 @@ class Offer(models.Model):
 
 
 class SaleOffer(Offer):
+    team = models.ForeignKey(Team, models.CASCADE) # // FIX: ADDED
     product_kit = models.ForeignKey(ProductKit, on_delete=models.CASCADE)
 
     @staticmethod
     def place(
             manufacturer: User,
+            team_id: Team,# // FIX: ADDED
             product_kit: ProductKit,
             price: Decimal,
     ):
@@ -55,6 +58,7 @@ class SaleOffer(Offer):
 
         return SaleOffer.objects.create(
             trader=manufacturer,
+            team=team_id, # // FIX: ADDED
             product_kit=product_kit,
             price=price,
             state=OfferState.ACTIVE.value

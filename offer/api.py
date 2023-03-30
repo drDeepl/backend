@@ -24,15 +24,15 @@ class SaleOfferController(ControllerBase):
     def place_offer(self, payload: SaleOfferPlace):
         current_user = self.context.request.auth
         product_kit = get_object_or_404(ProductKit, id=payload.product_kit_id)
-
-        result = SaleOffer.place(current_user, product_kit, payload.price)
+        team = get_object_or_404(Team, id=payload.team_id) # // FIX: ADDED
+        result = SaleOffer.place(current_user, team,product_kit, payload.price)
 
         channel_layer = get_channel_layer()
         async_to_sync(channel_layer.group_send)(
             'players',
             {'type': 'place.sale.offer', 'id': result.id}
         )
-
+                    
         return result
 
     @http_get('/list', response=List[SaleOfferOut])
@@ -52,7 +52,8 @@ class SaleOfferController(ControllerBase):
             'players',
             {'type': 'acquired.sale.offer', 'id': offer_id}
         )
-
+        for _i in range(0,5):
+            print(channel_layer)
         return result
 
 
