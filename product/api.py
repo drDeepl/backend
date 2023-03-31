@@ -84,6 +84,15 @@ class ProductKitController(ControllerBase):
         product_kit = get_object_or_404(ProductKit, id=product_kit_id)
         return product_kit
 
+    # // FIX: ADD FEATURE: get_product_name
+    @http_get('/product-kits/product/{product_kit_id}', response=ProductOut)
+    def get_product_from_product_kit(self, product_kit_id: int):
+        product_kit = get_object_or_404(ProductKit, id=product_kit_id)
+        product = product_kit.product
+        return product
+        
+        
+
     @http_get('/product-kits', response=List[ProductKitOut])
     @paginate
     def list_products(self):

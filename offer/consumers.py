@@ -10,29 +10,29 @@ class Consumer(JsonWebsocketConsumer):
         self.accept()
 
     def receive(self, text_data=None, bytes_data=None):
-        # self.send(text_data)
-        pass
+        self.send(text_data)
+        print('SOCKET RECEIVE')
         
 
     def disconnect(self, code):
         async_to_sync(self.channel_layer.group_discard)('players', self.channel_name)
 
-    # def acquired_sale_offer(self, event):
-    #     self.send_json(
-    #          {
-    #          'type': 'acquired.sale.offer',
-    #          'id': event['id']
-    #          }
-    #          )
-    #     print("SOCKET SEND ACQUIRED")
+    def acquired_sale_offer(self, event):
+        self.send_json(
+             {
+             'type': 'acquired.sale.offer',
+             'id': event['id']
+             }
+             )
+        print("SOCKET SEND ACQUIRED")
 
-    # def acquired_purchase_offer(self, event):
-    #      self.send_json(
-    #         {
-    #             'type': 'acquired.purchase.offer',
-    #             'id': event['id']
-    #         }
-    #     )
+    def acquired_purchase_offer(self, event):
+         self.send_json(
+            {
+                'type': 'acquired.purchase.offer',
+                'id': event['id']
+            }
+        )
 
     def place_sale_offer(self, event):
          self.send_json(
