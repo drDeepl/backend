@@ -93,9 +93,10 @@ class ProductKitController(ControllerBase):
         
         
 
+
     @http_get('/product-kits', response=List[ProductKitOut])
     @paginate
-    def list_products(self):
+    def list_product_kits(self):
         qs = ProductKit.objects.all()
         return qs
 
@@ -111,8 +112,7 @@ class ProductKitController(ControllerBase):
 
     @http_delete('/product-kits/{product_id}', auth=JWTAuth())
     def delete_product_kit(self, product_id: int):
-        for _ in range(0,5):
-            print()
+        
         current_user: User = self.context.request.auth
         
         print(current_user.role)
