@@ -77,7 +77,7 @@ class PurchaseOffer(Offer):
             price: Decimal
     ):
 
-        check_role(customer, Role.CUSTOMER)
+        check_role(customer, Role.PLAYER)
         print("PURCHASE OFFER PLACE")
         print("PURCHASE OFFER PLACE")
         print("PURCHASE OFFER PLACE")
