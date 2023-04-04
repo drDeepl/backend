@@ -14,3 +14,4 @@ class TeamProduct(models.Model):
     team = models.ForeignKey(Team, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     timestamp = models.DateTimeField(auto_now=True)
+    count = models.IntegerField()

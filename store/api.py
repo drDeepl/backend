@@ -19,12 +19,12 @@ class StoreController(ControllerBase):
         current_user: User = self.context.request.auth
         team = current_user.team
         
-        # if team.id != team_id:
-        #     print("CHECK CURRENT TEAM")
-        #     # check_admin(self.context)
+        #// FIX if team.id != team_id:
+        #// FIX print("CHECK CURRENT TEAM")
+        # // FIX  # check_admin(self.context)
 
-        # FIX: Убрал получение списка продуктов команды текущего пользователя
-        # FIX: Изменил на получение списка продуктов команды чей team_id указан в запросе
+        # // FIX: Убрал получение списка продуктов команды текущего пользователя
+        # // FIX: Изменил на получение списка продуктов команды чей team_id указан в запросе
         return get_all_products(team_id)
 
     @http_get('{team_id}/product-kits/list', response=List[StoreProductKitOut])
@@ -45,20 +45,7 @@ class StoreController(ControllerBase):
             
             check_admin(self.context)
         team_product_kit = TeamProductKit.objects.filter(product_kit=product_kit_id)[0]
+        count_product = team_product_kit.product_kit.count
         
-        TeamProduct.objects.create(team=team_product_kit.team, product=team_product_kit.product_kit.product)
+        TeamProduct.objects.create(team=team_product_kit.team, product=team_product_kit.product_kit.product, count=count_product)
         team_product_kit.delete()
-        # return check_products_created(team)
-
-    # FIX: Создал отдельный запрос для проверки готовности продуктов
-    # @http_get('{team_id}/product-kits/check')
-    # def check_created_products(self, team_id: int):
-    #     current_user: User = self.context.request.auth
-    #     team = current_user.team
-    #     if team.id != team_id:
-            
-    #         check_admin(self.context)
-
-        # return check_products_created(team)
-
-    
