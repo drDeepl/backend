@@ -1,5 +1,6 @@
 from typing import List
 
+from django.shortcuts import get_object_or_404
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
 from django.shortcuts import get_object_or_404
@@ -8,7 +9,7 @@ from ninja_extra.controllers.base import api_controller, ControllerBase
 from ninja_jwt.authentication import JWTAuth
 
 from offer.models import SaleOffer, PurchaseOffer
-from offer.schemas import SaleOfferOut, SaleOfferPlace, SaleDoneOut, PurchaseOfferPlace, PurchaseOfferOut, \
+from offer.schemas import SaleOfferState,SaleOfferOut, SaleOfferPlace, SaleDoneOut, PurchaseOfferPlace, PurchaseOfferOut, \
     PurchaseDoneOut
 from offer.services import find_active_sale_offers, acquire_sale_offer, find_active_purchase_offers, \
     acquire_purchase_offer
@@ -40,6 +41,12 @@ class SaleOfferController(ControllerBase):
         offers_sale = find_active_sale_offers()
         return offers_sale
 
+    @http_get('/state-offer/{offer_id}', response=SaleOfferState)
+    def get_status_offer(self, offer_id:int):
+        offer = get_object_or_404(SaleOffer, id=offer_id)
+        return offer
+    
+
     @http_post('/acquire', response=SaleDoneOut)
     def acquire(self, offer_id: int, team_id: int):
         current_user: User = self.context.request.auth
@@ -52,8 +59,7 @@ class SaleOfferController(ControllerBase):
             'players',
             {'type': 'acquired.sale.offer', 'id': offer_id}
         )
-        for _i in range(0,5):
-            print(channel_layer)
+        
         return result
 
 

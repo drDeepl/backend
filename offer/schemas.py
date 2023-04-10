@@ -9,6 +9,11 @@ class SaleOfferOut(ModelSchema):
         model_fields = ['id', 'trader', 'team', 'price', 'timestamp', 'state', 'product_kit']
 
 
+class SaleOfferState(ModelSchema):
+    class Config:
+        model = SaleOffer
+        model_fields = ['state']
+
 class SaleOfferPlace(ModelSchema):
     product_kit_id: int
     team_id: int
