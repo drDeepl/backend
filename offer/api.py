@@ -42,7 +42,7 @@ class SaleOfferController(ControllerBase):
         return offers_sale
 
     @http_get('/state-offer/{offer_id}', response=SaleOfferState)
-    def get_status_offer(self, offer_id:int):
+    def get_state_offer(self, offer_id:int):
         offer = get_object_or_404(SaleOffer, id=offer_id)
         return offer
     
