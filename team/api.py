@@ -7,6 +7,9 @@ from ninja_extra.controllers import Detail
 from ninja_jwt.authentication import JWTAuth
 from ninja.pagination import paginate
 
+from account.models import Account
+from account.schemas import AccountOut
+
 from team.models import Team
 from team.schemas import CreateTeamSchema, TeamOutSchema, PlayerTeamSchema
 from user.models import User
@@ -36,6 +39,19 @@ class TeamController(ControllerBase):
         if not user.team == team:
             check_admin(self.context)
         return participants
+    
+    @http_get('teams/balance/{team_id}', response=AccountOut)
+    def get_balance(self, team_id: int):
+        team = get_object_or_404(Team, id=team_id)
+        print("TEAM", team.account)
+        account_id = team.account.id
+        account = get_object_or_404(Account, id=account_id)
+        user: User = self.context.request.auth
+        if user.team != team:
+            check_admin(self.context)
+        return account
+    
+
 
     @http_post('teams/', response=TeamOutSchema)
     def create_team(self, payload: CreateTeamSchema):

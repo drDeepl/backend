@@ -65,6 +65,7 @@ class AccountController(ControllerBase):
 
         qs = Account.objects.all()
         return qs
+    
 
 
 @api_controller('/', tags=['Transaction'], permissions=[permissions.IsAuthenticated], auth=JWTAuth())
