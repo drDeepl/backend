@@ -1,6 +1,6 @@
 from datetime import datetime
 from decimal import Decimal
-from enum import EnumMeta
+from enum import Enum
 
 from django.db import models
 
@@ -12,7 +12,7 @@ from team.models import Team # // FIX: ADDED
 from user.utils import check_role
 
 
-class OfferState(EnumMeta):
+class OfferState(Enum):
     DONE = "Done"
     DELETED = "Deleted"
     ACTIVE = "Active"
@@ -32,7 +32,7 @@ class Offer(models.Model):
     timestamp = models.DateTimeField(auto_now=True)
     state = models.CharField(max_length=16, choices=[
         (tag, tag.value) for tag in OfferState
-    ], default=OfferState.ACTIVE)
+    ], default=OfferState.ACTIVE.value)
 
     def remove(self):
         if self.state != OfferState.ACTIVE:
