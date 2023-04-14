@@ -21,7 +21,7 @@ def find_active_purchase_offers() -> List[PurchaseOffer]:
 def acquire_sale_offer(team: Team, offer: SaleOffer) -> SaleDone:
     seller = User.objects.get(id=offer.trader.id)
     account_transaction = transfer(team.account, seller.account, offer.price)
-    print(f"SET OFFER DONE", OfferState.DONE)
+    print(f"SET OFFER DONE", OfferState.DONE.value)
     offer.state = OfferState.DONE
     sale = SaleDone.objects.create(offer=offer, transaction=account_transaction)
     offer.save()

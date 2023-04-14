@@ -8,7 +8,7 @@ from ninja_extra import permissions, http_post, http_get
 from ninja_extra.controllers.base import api_controller, ControllerBase
 from ninja_jwt.authentication import JWTAuth
 
-from offer.models import SaleOffer, PurchaseOffer
+from offer.models import SaleOffer, PurchaseOffer, OfferState, Offer
 from offer.schemas import SaleOfferState,SaleOfferOut, SaleOfferPlace, SaleDoneOut, PurchaseOfferPlace, PurchaseOfferOut, \
     PurchaseDoneOut
 from offer.services import find_active_sale_offers, acquire_sale_offer, find_active_purchase_offers, \
@@ -46,6 +46,18 @@ class SaleOfferController(ControllerBase):
         offer = get_object_or_404(SaleOffer, id=offer_id)
         return offer
     
+    @http_post('/offer-to-await', response=SaleOfferOut)
+    def change_status(self, offer_id: int):
+            current_user: User = self.context.request.auth
+            check_role(current_user, Role.PLAYER)
+            offer = get_object_or_404(SaleOffer, id=offer_id)
+            offer.state = OfferState.AWAIT.value
+            offer.save()
+            return offer
+
+
+    
+
 
     @http_post('/acquire', response=SaleDoneOut)
     def acquire(self, offer_id: int, team_id: int):

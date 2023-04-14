@@ -16,6 +16,7 @@ class OfferState(Enum):
     DONE = "Done"
     DELETED = "Deleted"
     ACTIVE = "Active"
+    AWAIT = "Await"
 
 
 #     Offer state map
@@ -78,10 +79,7 @@ class PurchaseOffer(Offer):
     ):
 
         check_role(customer, Role.PLAYER)
-        print("PURCHASE OFFER PLACE")
-        print("PURCHASE OFFER PLACE")
-        print("PURCHASE OFFER PLACE")
-
+        
         return PurchaseOffer.objects.create(
             trader=customer,
             product=product,
@@ -107,3 +105,4 @@ class SaleDone(models.Model):
 class PurchaseDone(models.Model):
     offer = models.OneToOneField(PurchaseOffer, on_delete=models.CASCADE)
     transaction = models.OneToOneField(Transaction, on_delete=models.CASCADE)
+
