@@ -1,6 +1,6 @@
 from datetime import datetime
 from decimal import Decimal
-from enum import Enum
+from enum import EnumMeta
 
 from django.db import models
 
@@ -12,7 +12,7 @@ from team.models import Team # // FIX: ADDED
 from user.utils import check_role
 
 
-class OfferState(Enum):
+class OfferState(EnumMeta):
     DONE = "Done"
     DELETED = "Deleted"
     ACTIVE = "Active"

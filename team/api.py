@@ -36,7 +36,7 @@ class TeamController(ControllerBase):
         team = get_object_or_404(Team, id=team_id)
         participants = User.objects.filter(team=team)
         user: User = self.context.request.auth
-        if not user.team == team:
+        if user.team != team:
             check_admin(self.context)
         return participants
     
