@@ -23,10 +23,12 @@ class SaleOfferController(ControllerBase):
     @http_post('/place', response=SaleOfferOut)
     def place_offer(self, payload: SaleOfferPlace):
         current_user = self.context.request.auth
+        print("OFFER SALE PLACE current user")
+        print(current_user.role)
         product_kit = get_object_or_404(ProductKit, id=payload.product_kit_id)
         team = get_object_or_404(Team, id=payload.team_id) # // FIX: ADDED
         result = SaleOffer.place(current_user, team,product_kit, payload.price)
-
+        
         channel_layer = get_channel_layer()
         async_to_sync(channel_layer.group_send)(
             'players',
@@ -43,7 +45,7 @@ class SaleOfferController(ControllerBase):
     @http_post('/acquire', response=SaleDoneOut)
     def acquire(self, offer_id: int, team_id: int):
         current_user: User = self.context.request.auth
-        check_role(current_user, Role.MANUFACTURER) # DEFAULT: PLAYER
+        check_role(current_user, Role.PLAYER) # DEFAULT: PLAYER
         offer = get_object_or_404(SaleOffer, id=offer_id)
         team = get_object_or_404(Team, id=team_id)
         result = acquire_sale_offer(team, offer)

@@ -12,6 +12,7 @@ from team.schemas import CreateTeamSchema, TeamOutSchema, PlayerTeamSchema
 from user.models import User
 from user.schemas import UserOut
 from user.utils import check_admin
+from account.models import Account
 
 
 @api_controller('/', tags=['Team'], permissions=[permissions.IsAuthenticated], auth=JWTAuth())
@@ -36,6 +37,16 @@ class TeamController(ControllerBase):
         if not user.team == team:
             check_admin(self.context)
         return participants
+    
+    @http_get('teams/balance/{team_id}', response=int)
+    def get_team_balance(self, team_id: int):
+        team = get_object_or_404(Team, id=team_id)
+        team_account = team.account.id
+        account = get_object_or_404(Account, id=team_account)
+        print("TEAM ACCOUNT")
+        print(account)
+
+        return account.balance
 
     @http_post('teams/', response=TeamOutSchema)
     def create_team(self, payload: CreateTeamSchema):
