@@ -71,19 +71,19 @@ class PurchaseOffer(Offer):
 
     @staticmethod
     def place(
-            customer: User,
+            player: User, # was before "cutstomer: "
             product: Product,
             count: int,
             price: Decimal
     ):
 
-        check_role(customer, Role.CUSTOMER)
+        check_role(player, Role.PLAYER)
         print("PURCHASE OFFER PLACE")
         print("PURCHASE OFFER PLACE")
         print("PURCHASE OFFER PLACE")
 
         return PurchaseOffer.objects.create(
-            trader=customer,
+            trader=player,
             product=product,
             count=count,
             price=price,
