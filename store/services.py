@@ -57,6 +57,7 @@ def get_all_products(team: Team) -> List[StoreProductOut]:
     # check_products_created(team)
 
     all_products = list(map(lambda x: x.product, TeamProduct.objects.filter(team=team)))
+    
     counter = dict(Counter(all_products))
     return [StoreProductOut(product=k, count=v) for k, v in counter.items()]
 
