@@ -21,15 +21,17 @@ class SaleOfferPlace(ModelSchema):
 class PurchaseOfferOut(ModelSchema):
     class Config:
         model = PurchaseOffer
-        model_fields = ['id', 'trader', 'price', 'timestamp', 'state', 'product', 'count']
+        model_fields = ['id', 'trader', 'price', 'timestamp', 'state', 'product', 'count', 'to_customer']
 
 
 class PurchaseOfferPlace(ModelSchema):
     product_id: int
+    to_customer: int
+    
 
     class Config:
         model = PurchaseOffer
-        model_fields = ['price', 'count']
+        model_fields = ['price', 'count', 'to_customer']
 
 
 class SaleDoneOut(ModelSchema):  # todo add addition fields

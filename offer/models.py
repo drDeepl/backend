@@ -66,12 +66,14 @@ class SaleOffer(Offer):
 
 
 class PurchaseOffer(Offer):
+    to_customer = models.IntegerField()
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     count = models.PositiveIntegerField()
 
     @staticmethod
     def place(
             player: User, # was before "cutstomer: "
+            to_customer: int,
             product: Product,
             count: int,
             price: Decimal
@@ -84,6 +86,7 @@ class PurchaseOffer(Offer):
 
         return PurchaseOffer.objects.create(
             trader=player,
+            to_customer=to_customer,
             product=product,
             count=count,
             price=price,

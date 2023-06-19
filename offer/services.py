@@ -12,6 +12,10 @@ from user.models import User
 def find_active_sale_offers() -> List[SaleOffer]:
     return list(SaleOffer.objects.filter(state=OfferState.ACTIVE.value))
 
+def find_active_sale_offers_for_team(team_id:int) -> List[SaleOffer]:
+    return list(SaleOffer.objects.filter(state=OfferState.ACTIVE.value, team=team_id))
+
+
 
 def find_active_purchase_offers() -> List[PurchaseOffer]:
     return list(PurchaseOffer.objects.filter(state=OfferState.ACTIVE.value))

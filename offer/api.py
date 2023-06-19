@@ -10,7 +10,7 @@ from ninja_jwt.authentication import JWTAuth
 from offer.models import SaleOffer, PurchaseOffer
 from offer.schemas import SaleOfferOut, SaleOfferPlace, SaleDoneOut, PurchaseOfferPlace, PurchaseOfferOut, \
     PurchaseDoneOut
-from offer.services import find_active_sale_offers, acquire_sale_offer, find_active_purchase_offers, \
+from offer.services import find_active_sale_offers,find_active_sale_offers_for_team, acquire_sale_offer, find_active_purchase_offers, \
     acquire_purchase_offer
 from product.models import ProductKit, Product
 from user.models import User, Role
@@ -42,6 +42,13 @@ class SaleOfferController(ControllerBase):
         offers_sale = find_active_sale_offers()
         return offers_sale
 
+    @http_get('/list/{team_id}', response=List[SaleOfferOut])
+    def list_offers_for_team(self, team_id):
+        offers_sale = find_active_sale_offers_for_team(team_id)
+        return offers_sale
+
+
+
     @http_post('/acquire', response=SaleDoneOut)
     def acquire(self, offer_id: int, team_id: int):
         current_user: User = self.context.request.auth
@@ -65,8 +72,9 @@ class PurchaseOfferController(ControllerBase):
     def place_offer(self, payload: PurchaseOfferPlace):
         current_user = self.context.request.auth
         product = get_object_or_404(Product, id=payload.product_id)
+        to_customer = get_object_or_404(User, id=payload.to_customer)
 
-        result = PurchaseOffer.place(current_user, product, payload.count, payload.price)
+        result = PurchaseOffer.place(current_user, to_customer.id, product,  payload.count, payload.price, )
 
         channel_layer = get_channel_layer()
         async_to_sync(channel_layer.group_send)(
