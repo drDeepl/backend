@@ -16,6 +16,7 @@ class OfferState(Enum):
     DONE = "Done"
     DELETED = "Deleted"
     ACTIVE = "Active"
+    AWAIT = "Await"
 
 
 #     Offer state map
@@ -37,7 +38,7 @@ class Offer(models.Model):
     def remove(self):
         if self.state != OfferState.ACTIVE:
             raise OfferStateIsNotActiveException()
-        self.state = OfferState.DELETED
+        self.state = OfferState.DELETED.value
 
     class Meta:
         abstract = True

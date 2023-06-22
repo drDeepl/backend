@@ -7,10 +7,10 @@ from ninja_extra import permissions, http_post, http_get
 from ninja_extra.controllers.base import api_controller, ControllerBase
 from ninja_jwt.authentication import JWTAuth
 
-from offer.models import SaleOffer, PurchaseOffer
+from offer.models import SaleOffer, PurchaseOffer,OfferState
 from offer.schemas import SaleOfferOut, SaleOfferPlace, SaleDoneOut, PurchaseOfferPlace, PurchaseOfferOut, \
     PurchaseDoneOut
-from offer.services import find_active_sale_offers,find_active_sale_offers_for_team, acquire_sale_offer, find_active_purchase_offers, \
+from offer.services import find_active_sale_offers,find_active_sale_offers_for_team, find_await_sale_offers_for_team, acquire_sale_offer, find_active_purchase_offers, \
     acquire_purchase_offer
 from product.models import ProductKit, Product
 from user.models import User, Role
@@ -33,8 +33,7 @@ class SaleOfferController(ControllerBase):
         async_to_sync(channel_layer.group_send)(
             'players',
             {'type': 'place.sale.offer', 'id': result.id}
-        )
-                    
+        )         
         return result
 
     @http_get('/list', response=List[SaleOfferOut])
@@ -47,6 +46,22 @@ class SaleOfferController(ControllerBase):
         offers_sale = find_active_sale_offers_for_team(team_id)
         return offers_sale
 
+
+    @http_get('/list/state/await/{team_id}', response=List[SaleOfferOut])
+    def list_offers_awaited_for_team(self, team_id):
+        offers_sale = find_await_sale_offers_for_team(team_id)
+        return offers_sale
+
+    @http_post('/offer-to-await', response=SaleOfferOut)
+    def offer_to_await(self, offer_id: int):
+        current_user: User = self.context.request.auth
+        check_role(current_user, Role.PLAYER) # DEFAULT: PLAYER
+        offer = get_object_or_404(SaleOffer, id=offer_id)
+        offer.state = OfferState.AWAIT.value
+        offer.save()
+        print("EDITED STATE OF OFFER")
+        print(offer.state)
+        return offer
 
 
     @http_post('/acquire', response=SaleDoneOut)
@@ -61,8 +76,7 @@ class SaleOfferController(ControllerBase):
             'players',
             {'type': 'acquired.sale.offer', 'id': offer_id}
         )
-        for _i in range(0,5):
-            print(channel_layer)
+        
         return result
 
 

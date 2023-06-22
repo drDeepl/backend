@@ -90,7 +90,8 @@ class ProductKitController(ControllerBase):
         product_kit = get_object_or_404(ProductKit, id=product_kit_id)
         product = product_kit.product
         return product
-        
+    
+    
         
 
     @http_get('/product-kits', response=List[ProductKitOut])
