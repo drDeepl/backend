@@ -121,3 +121,15 @@ class PurchaseOfferController(ControllerBase):
         )
 
         return result
+
+    @http_get('/to-await/{offer_id}', response=PurchaseOfferOut)
+    def offer_to_await(self, offer_id: int):
+        current_user: User = self.context.request.auth
+        check_role(current_user, Role.CUSTOMER) # DEFAULT: PLAYER
+        offer = get_object_or_404(PurchaseOffer, id=offer_id)
+        offer.state = OfferState.AWAIT.value
+        offer.save()
+        print("EDITED STATE OF OFFER")
+        print(offer.state)
+        return offer
+
