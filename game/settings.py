@@ -105,8 +105,8 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'economic',
         'USER': 'economic',
-        'PASSWORD': '',
-        'HOST': '',
+        'PASSWORD': 'Economic#321',
+        'HOST': '194.67.121.7',
         'ATOMIC_REQUESTS': True,
     }
     #      'default': {

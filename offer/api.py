@@ -59,7 +59,7 @@ class SaleOfferController(ControllerBase):
         offer = get_object_or_404(SaleOffer, id=offer_id)
         offer.state = OfferState.AWAIT.value
         offer.save()
-        offer.close()
+        
         print("EDITED STATE OF OFFER")
         print(offer.state)
 

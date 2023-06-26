@@ -38,7 +38,7 @@ class TeamController(ControllerBase):
             check_admin(self.context)
         return participants
     
-    @http_get('teams/balance/{team_id}', response=int)
+    @http_get('teams/balance/{team_id}', response=float)
     def get_team_balance(self, team_id: int):
         team = get_object_or_404(Team, id=team_id)
         team_account = team.account.id

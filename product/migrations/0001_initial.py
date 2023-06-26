@@ -13,20 +13,19 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='Account',
+            name='Product',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('is_unlimited', models.BooleanField(default=False)),
+                ('name', models.CharField(max_length=128)),
             ],
         ),
         migrations.CreateModel(
-            name='Transaction',
+            name='ProductKit',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('amount', models.DecimalField(decimal_places=2, max_digits=13)),
-                ('timestamp', models.DateTimeField(auto_now=True)),
-                ('from_account', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='from_account', to='account.account')),
-                ('to_account', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='to_account', to='account.account')),
+                ('count', models.IntegerField(verbose_name='Количество')),
+                ('time', models.IntegerField(verbose_name='Время')),
+                ('product', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='product.product')),
             ],
         ),
     ]

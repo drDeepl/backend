@@ -9,24 +9,27 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
+        ('product', '0001_initial'),
+        ('team', '0001_initial'),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Account',
+            name='TeamProductKit',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('is_unlimited', models.BooleanField(default=False)),
+                ('timestamp', models.DateTimeField(auto_now=True)),
+                ('product_kit', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='product.productkit')),
+                ('team', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='team.team')),
             ],
         ),
         migrations.CreateModel(
-            name='Transaction',
+            name='TeamProduct',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('amount', models.DecimalField(decimal_places=2, max_digits=13)),
                 ('timestamp', models.DateTimeField(auto_now=True)),
-                ('from_account', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='from_account', to='account.account')),
-                ('to_account', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='to_account', to='account.account')),
+                ('product', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='product.product')),
+                ('team', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='team.team')),
             ],
         ),
     ]
