@@ -68,7 +68,7 @@ class SaleOffer(Offer):
 
 class PurchaseOffer(Offer):
     to_customer = models.IntegerField()
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="product")
     count = models.PositiveIntegerField()
 
     @staticmethod

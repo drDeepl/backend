@@ -11,7 +11,7 @@ from offer.models import SaleOffer, PurchaseOffer,OfferState
 from offer.schemas import SaleOfferOut, SaleOfferPlace, SaleDoneOut, PurchaseOfferPlace, PurchaseOfferOut, \
     PurchaseDoneOut
 from offer.services import find_active_sale_offers,find_active_sale_offers_for_team, find_await_sale_offers_for_team, acquire_sale_offer, find_active_purchase_offers, \
-    acquire_purchase_offer
+    acquire_purchase_offer,find_active_purchase_offers_for_customer
 from product.models import ProductKit, Product
 from user.models import User, Role
 from user.utils import check_role
@@ -59,8 +59,10 @@ class SaleOfferController(ControllerBase):
         offer = get_object_or_404(SaleOffer, id=offer_id)
         offer.state = OfferState.AWAIT.value
         offer.save()
+        offer.close()
         print("EDITED STATE OF OFFER")
         print(offer.state)
+
         return offer
 
 
@@ -103,15 +105,21 @@ class PurchaseOfferController(ControllerBase):
     def list_offers(self):
         return find_active_purchase_offers()
 
+
+    @http_get("/list/awaited/{customer_id}", response=List[PurchaseOfferOut])
+    def list_offers_awaited_for_customer(self, customer_id:int):
+        return find_active_purchase_offers_for_customer(customer_id)
+
+
     @http_post('/acquire', response=PurchaseDoneOut)
-    def acquire(self, offer_id: int, team_id: int):
+    def acquire(self, offer_id: int, customer_id: int):
         current_user: User = self.context.request.auth
         
-        check_role(current_user, Role.CUSTOMER) # DEFAULT: MANUFACTURER
+        check_role(current_user, Role.PLAYER) # DEFAULT: MANUFACTURER
         offer = get_object_or_404(PurchaseOffer, id=offer_id)
-
+        customer = User.objects.get(id=customer_id)
         # BEFORE result = acquire_purchase_offer(current_user.team, offer)
-        result = acquire_purchase_offer(team_id, offer)
+        result = acquire_purchase_offer(customer, offer)
         
 
         channel_layer = get_channel_layer()
