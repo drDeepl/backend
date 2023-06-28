@@ -3,11 +3,13 @@ from ninja import ModelSchema
 from offer.models import PurchaseDone, SaleDone, PurchaseOffer, SaleOffer
 
 
+
+
 class SaleOfferOut(ModelSchema):
+    
     class Config:
         model = SaleOffer
         model_fields = ['id', 'trader', 'team', 'price', 'timestamp', 'state', 'product_kit']
-
 
 class SaleOfferPlace(ModelSchema):
     product_kit_id: int

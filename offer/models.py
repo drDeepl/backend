@@ -81,9 +81,7 @@ class PurchaseOffer(Offer):
     ):
 
         check_role(player, Role.PLAYER)
-        print("PURCHASE OFFER PLACE")
-        print("PURCHASE OFFER PLACE")
-        print("PURCHASE OFFER PLACE")
+        
 
         return PurchaseOffer.objects.create(
             trader=player,

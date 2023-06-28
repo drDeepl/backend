@@ -6,9 +6,8 @@ from account.models import Account, Transaction
 
 
 def transfer(account_from: Account, account_to: Account, amount: Decimal) -> Transaction:
-    print("TRANSFER")
-    print(f"account_from: {account_from}")
-    print(f"account_to: {account_to}")
+    
+    
     if account_from is None:
         raise AccountIsNoneException()
     if account_to is None:

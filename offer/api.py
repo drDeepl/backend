@@ -11,7 +11,7 @@ from offer.models import SaleOffer, PurchaseOffer,OfferState
 from offer.schemas import SaleOfferOut, SaleOfferPlace, SaleDoneOut, PurchaseOfferPlace, PurchaseOfferOut, \
     PurchaseDoneOut
 from offer.services import find_active_sale_offers,find_active_sale_offers_for_team, find_await_sale_offers_for_team, acquire_sale_offer, find_active_purchase_offers, \
-    acquire_purchase_offer,find_active_purchase_offers_for_customer
+    acquire_purchase_offer,find_active_purchase_offers_for_customer,find_done_sale_offers_for_team
 from product.models import ProductKit, Product
 from user.models import User, Role
 from user.utils import check_role
@@ -47,10 +47,19 @@ class SaleOfferController(ControllerBase):
         return offers_sale
 
 
+
     @http_get('/list/state/await/{team_id}', response=List[SaleOfferOut])
     def list_offers_awaited_for_team(self, team_id):
         offers_sale = find_await_sale_offers_for_team(team_id)
         return offers_sale
+    
+    @http_post('/list/state/done', response=List[SaleOfferOut])
+    def list_offers_done_for_team(self, page:int):
+        offers_sale = find_done_sale_offers_for_team(page)
+        return offers_sale
+        
+
+
 
     @http_post('/offer-to-await', response=SaleOfferOut)
     def offer_to_await(self, offer_id: int):
@@ -109,6 +118,8 @@ class PurchaseOfferController(ControllerBase):
     @http_get("/list/awaited/{customer_id}", response=List[PurchaseOfferOut])
     def list_offers_awaited_for_customer(self, customer_id:int):
         return find_active_purchase_offers_for_customer(customer_id)
+    
+    
 
 
     @http_post('/acquire', response=PurchaseDoneOut)

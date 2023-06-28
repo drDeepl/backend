@@ -46,10 +46,7 @@ class StoreController(ControllerBase):
             
             check_admin(self.context)
         team_product_kit = TeamProductKit.objects.filter(product_kit=product_kit_id)[0]
-        print("PRODUCT KIT NAME:")
-        print(team_product_kit.product_kit.product.name)
-        print("COUNT PRODUCTS:")
-        print(team_product_kit.product_kit.count)
+        
         
         count_products = team_product_kit.product_kit.count
         for i in range(count_products): # FIXED: Добаивл цикл для создания количество продукт, указанных в продуктовом наборе
