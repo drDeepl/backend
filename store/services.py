@@ -12,6 +12,7 @@ from product.schemas import ProductOut, ProductKitOut
 from store.exceptions import TeamHaveNot
 from store.models import TeamProduct, TeamProductKit
 from store.schemas import StoreProductOut, StoreProductKitOut
+
 from team.models import Team
 
 
@@ -24,13 +25,14 @@ def add_product_kit(team: Team, product_kit: ProductKit):
 
 
 @transaction.atomic
-def get_all_product_kits(team: Team) -> List[StoreProductKitOut]:
+def get_all_product_kits(team: Team) -> List[ProductKit]:
     print("get_all_product_kits", team)
     # check_products_created(team)
     
     all_product_kits: List[ProductKit] = list(map(lambda x: x.product_kit, TeamProductKit.objects.filter(team=team)))
-    counter: Dict[ProductKit, int] = dict(Counter(all_product_kits))
-    return [StoreProductKitOut(product_kit=k, count=v) for k, v in counter.items()]
+    return all_product_kits
+    # counter: Dict[ProductKit, int] = dict(Counter(all_product_kits))
+    # return [StoreProductKitOut(product_kit=k, count=v) for k, v in counter.items()]
 
 
 

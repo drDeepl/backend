@@ -10,4 +10,4 @@ class StoreProductOut(Schema):
 
 class StoreProductKitOut(Schema):
     product_kit: ProductKitOut
-    count: int
+    # count: int

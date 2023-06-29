@@ -5,9 +5,13 @@ from ninja_extra.controllers.base import api_controller, ControllerBase
 from ninja_jwt.authentication import JWTAuth
 
 from store.schemas import StoreProductOut, StoreProductKitOut
+from product.schemas import ProductKitOut
 from store.services import get_all_products, get_all_product_kits,check_products_created
+
 from user.models import User
 from store.models import TeamProduct, TeamProductKit
+
+
 from user.utils import check_admin
 from ninja.pagination import paginate
 
@@ -27,14 +31,11 @@ class StoreController(ControllerBase):
         # FIX: Изменил на получение списка продуктов команды чей team_id указан в запросе
         return get_all_products(team_id)
 
-    @http_get('{team_id}/product-kits/list', response=List[StoreProductKitOut])
+    @http_get('{team_id}/product-kits/list', response=List[ProductKitOut])
     @paginate
     def list_product_kits(self, team_id: int):
         current_user: User = self.context.request.auth
         team = current_user.team
-
-        
-
         return get_all_product_kits(team)
 
     @http_get('{team_id}/product-kits/check/{product_kit_id}')
@@ -52,7 +53,7 @@ class StoreController(ControllerBase):
         for i in range(count_products): # FIXED: Добаивл цикл для создания количество продукт, указанных в продуктовом наборе
             TeamProduct.objects.create(team=team_product_kit.team, product=team_product_kit.product_kit.product)
         team_product_kit.delete()
-        # return check_products_created(team)
+        return {'status': 'OK'}
 
     # FIX: Создал отдельный запрос для проверки готовности продуктов
     # @http_get('{team_id}/product-kits/check')
