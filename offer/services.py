@@ -20,12 +20,16 @@ def find_active_sale_offers_for_team(team_id:int) -> List[SaleOffer]:
 def find_await_sale_offers_for_team(team_id:int) -> List[SaleOffer]:
     return list(SaleOffer.objects.filter(state=OfferState.AWAIT.value, team=team_id))
 
-def find_done_sale_offers_for_team(page:int,count_elements_on_page = 10) -> List[SaleOffer]:
-    offers_sale_done = SaleOffer.objects.filter(state=OfferState.DONE.value)
+
+
+def find_done_sale_offers() -> List[SaleOffer]:
+    # offers_sale_done = SaleOffer.objects.filter(state=OfferState.DONE.value)
     
-    return list(Paginator(offers_sale_done, count_elements_on_page).get_page(page))
-    # return list(SaleOffer.objects.filter(state=OfferState.DONE.value))
+    # return list(Paginator(offers_sale_done, count_elements_on_page).get_page(page))
+    return list(SaleOffer.objects.filter(state=OfferState.DONE.value))
     
+def find_done_purchase_offers() -> List[PurchaseOffer]:
+    return list(PurchaseOffer.objects.filter(state=OfferState.DONE.value))
 
 
 def find_active_purchase_offers() -> List[PurchaseOffer]:
@@ -53,7 +57,7 @@ def acquire_purchase_offer(customer: User, offer: PurchaseOffer) -> PurchaseDone
     print(f"TRADER ACCOUNT {account_trader.account}")
     
     account_transaction = transfer(customer.account, account_trader.account, offer.price)
-    offer.state = OfferState.DONE
+    offer.state = OfferState.DONE.value
     purchase = PurchaseDone.objects.create(offer=offer, transaction=account_transaction)
     offer.save()
     
