@@ -106,7 +106,7 @@ DATABASES = {
         'NAME': 'economic',
         'USER': 'economic',
         'PASSWORD': 'Economic#321',
-        'HOST': '194.67.121.7',
+        'HOST': '94.228.112.177',
         'ATOMIC_REQUESTS': True,
     }
     #      'default': {

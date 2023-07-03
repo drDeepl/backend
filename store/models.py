@@ -13,4 +13,5 @@ class TeamProductKit(models.Model):
 class TeamProduct(models.Model):
     team = models.ForeignKey(Team, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    count = models.PositiveIntegerField(verbose_name="Количество", default=0) # FIX: added row
     timestamp = models.DateTimeField(auto_now=True)
