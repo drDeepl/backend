@@ -54,10 +54,7 @@ class StoreController(ControllerBase):
         team_product_kit = TeamProductKit.objects.filter(product_kit=product_kit_id)[0]
         
         
-        # count_products = team_product_kit.product_kit.count
-        # for i in range(count_products): # FIXED: Добаивл цикл для создания количество продукт, указанных в продуктовом наборе
         
-        # TeamProduct.objects.create(team=team_product_kit.team, product=team_product_kit.product_kit.product, count=team_product_kit.product_kit.count)
         teamProduct, createdTeamProduct = TeamProduct.objects.get_or_create(team=team, product=team_product_kit.product_kit.product)
         if createdTeamProduct:
             createdTeamProduct.count = team_product_kit.count
