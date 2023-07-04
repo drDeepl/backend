@@ -10,7 +10,7 @@ class StoreProductOut(ModelSchema):
     product_name: str
     class Config:
         model= TeamProduct
-        model_fields = ['team','product','count']
+        model_fields = ['id','team','product','count']
 
 
 

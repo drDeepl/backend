@@ -75,17 +75,13 @@ def count_products(team: Team, product: Product) -> int:
 def remove_products(team: Team, product: Product, count: int):
     if not count_products(team, product) >= count:
         raise TeamHaveNot()
-    team_products = TeamProduct.objects.filter(Q(team=team) & Q(product=product))[:count]
-    print()
-    print()
-    print()
-    print(team_products)
-    print()
-    print()
-    print()
-    for team_product in team_products:
-        print(team_product)
-        team_product.delete()
+    team_product = TeamProduct.objects.filter(team=team, product=product)
+    team_product.count -= count
+    team_product.save()
+
+    # for team_product in team_products:
+    #     print(team_product)
+    #     team_product.delete()
     return
 
 
