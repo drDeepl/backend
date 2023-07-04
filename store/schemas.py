@@ -1,11 +1,17 @@
-from ninja import Schema
+from ninja import Schema, ModelSchema
 
 from product.schemas import ProductOut, ProductKitOut
+from store.models import TeamProduct
 
 
-class StoreProductOut(Schema):
-    product: ProductOut
-    count: int
+class StoreProductOut(ModelSchema):
+    # product: ProductOut
+    # count: int
+    product_name: str
+    class Config:
+        model= TeamProduct
+        model_fields = ['team','product','count']
+
 
 
 class StoreProductKitOut(Schema):

@@ -29,7 +29,12 @@ class StoreController(ControllerBase):
 
         # FIX: Убрал получение списка продуктов команды текущего пользователя
         # FIX: Изменил на получение списка продуктов команды чей team_id указан в запросе
-        return get_all_products(team_id)
+        def get_name_product(product):
+            product.product_name = product.product.name
+            return product
+                
+        return list(map(lambda product: get_name_product(product),TeamProduct.objects.filter(team=team_id)))
+        # return get_all_products(team_id)
 
     @http_get('{team_id}/product-kits/list', response=List[ProductKitOut])
     @paginate
@@ -49,9 +54,18 @@ class StoreController(ControllerBase):
         team_product_kit = TeamProductKit.objects.filter(product_kit=product_kit_id)[0]
         
         
-        count_products = team_product_kit.product_kit.count
-        for i in range(count_products): # FIXED: Добаивл цикл для создания количество продукт, указанных в продуктовом наборе
-            TeamProduct.objects.create(team=team_product_kit.team, product=team_product_kit.product_kit.product)
+        # count_products = team_product_kit.product_kit.count
+        # for i in range(count_products): # FIXED: Добаивл цикл для создания количество продукт, указанных в продуктовом наборе
+        
+        # TeamProduct.objects.create(team=team_product_kit.team, product=team_product_kit.product_kit.product, count=team_product_kit.product_kit.count)
+        teamProduct, createdTeamProduct = TeamProduct.objects.get_or_create(team=team, product=team_product_kit.product_kit.product)
+        if createdTeamProduct:
+            createdTeamProduct.count = team_product_kit.count
+            createdTeamProduct.save()
+        else:
+            teamProduct.count += team_product_kit.product_kit.count
+            teamProduct.save()
+            
         team_product_kit.delete()
         return {'status': 'OK'}
 

@@ -3,6 +3,7 @@ from ninja import ModelSchema
 from product.models import Product, ProductKit
 
 
+
 class ProductOut(ModelSchema):
     class Config:
         model = Product
