@@ -76,7 +76,7 @@ class PurchaseOffer(Offer):
     def place(
             player: User, # was before "cutstomer: "
             to_customer: int,
-            product: Product,
+            product: TeamProduct,
             count: int,
             price: Decimal
     ):

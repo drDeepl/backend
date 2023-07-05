@@ -29,7 +29,7 @@ class ProductController(ControllerBase):
     @http_get('/products', response=List[ProductOut])
     @paginate
     def list_products(self):
-        qs = Product.objects.all()
+        qs = Product.objects.filter(is_deleted=False)
         return qs
 
     @http_put('/products/{product_id}', response=ProductOut, permissions=[permissions.IsAuthenticated], auth=JWTAuth())
@@ -39,6 +39,13 @@ class ProductController(ControllerBase):
         product = get_object_or_404(Product, id=product_id)
         for attr, value in payload.dict().items():
             setattr(product, attr, value)
+        product.save()
+        return product
+    
+    @http_get('/products/delete/{product_id}', response=ProductOut, permissions=[permissions.IsAuthenticated], auth=JWTAuth())
+    def set_state_deleted_product(self, product_id: int):
+        product = get_object_or_404(Product, id=product_id)
+        product.is_deleted = True
         product.save()
         return product
 
@@ -107,6 +114,13 @@ class ProductKitController(ControllerBase):
         product_kit = get_object_or_404(ProductKit, id=product_kit_id)
         for attr, value in payload.dict().items():
             setattr(product_kit, attr, value)
+        product_kit.save()
+        return product_kit
+
+    @http_get('/product-kits/delete/{product_kit_id}', response=ProductKitOut, auth=JWTAuth())
+    def change_state_delete_product_kit(self, product_kit_id: int):
+        product_kit = get_object_or_404(ProductKit, id=product_kit_id)
+        product_kit.is_deleted = True
         product_kit.save()
         return product_kit
 

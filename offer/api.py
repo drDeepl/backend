@@ -96,9 +96,10 @@ class PurchaseOfferController(ControllerBase):
     @http_post('/place', response=PurchaseOfferOut)
     def place_offer(self, payload: PurchaseOfferPlace):
         current_user = self.context.request.auth
-        product = get_object_or_404(TeamProduct, id=payload.product_id)
+        print(f"ID OF PRODUCT {payload.product_id}")
+        product = get_object_or_404(TeamProduct, product_id=payload.product_id)
         to_customer = get_object_or_404(User, id=payload.to_customer)
-
+        print("PREAPRE PURCAHSE OFFER")
         result = PurchaseOffer.place(current_user, to_customer.id, product,  payload.count, payload.price, )
 
         channel_layer = get_channel_layer()

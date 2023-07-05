@@ -51,13 +51,14 @@ class StoreController(ControllerBase):
         if team.id != team_id:
             
             check_admin(self.context)
-        team_product_kit = TeamProductKit.objects.filter(product_kit=product_kit_id)[0]
+        team_product_kit = TeamProductKit.objects.filter(product_kit=product_kit_id).first()
         
         
         
         teamProduct, createdTeamProduct = TeamProduct.objects.get_or_create(team=team, product=team_product_kit.product_kit.product)
         if createdTeamProduct:
-            createdTeamProduct.count = team_product_kit.count
+            
+            createdTeamProduct.count = team_product_kit.product_kit.count
             createdTeamProduct.save()
         else:
             teamProduct.count += team_product_kit.product_kit.count

@@ -7,7 +7,7 @@ from product.models import Product, ProductKit
 class ProductOut(ModelSchema):
     class Config:
         model = Product
-        model_fields = ['id', 'name']
+        model_fields = ['id', 'name', 'is_deleted']
 
 
 class ProductIn(ModelSchema):
@@ -19,7 +19,7 @@ class ProductIn(ModelSchema):
 class ProductKitOut(ModelSchema):
     class Config:
         model = ProductKit
-        model_fields = ['id', 'product', 'count', 'time']
+        model_fields = ['id', 'product', 'count', 'time', "is_deleted"]
 
 
 class ProductKitIn(ModelSchema):

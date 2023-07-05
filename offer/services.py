@@ -61,7 +61,7 @@ def acquire_purchase_offer(customer: User, offer: PurchaseOffer) -> PurchaseDone
     purchase = PurchaseDone.objects.create(offer=offer, transaction=account_transaction)
     offer.save()
     
-    remove_products(team=trader.team, team_product=offer.product, count=offer.count)
+    remove_products(team=trader.team, product=offer.product, count=offer.count)
     
     return purchase
 
