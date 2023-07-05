@@ -16,7 +16,7 @@ from product.models import ProductKit, Product
 from user.models import User, Role
 from user.utils import check_role
 from team.models import Team
-
+from store.models import TeamProduct
 
 @api_controller('/offers/sale', tags=['Offer'], permissions=[permissions.IsAuthenticated], auth=JWTAuth())
 class SaleOfferController(ControllerBase):
@@ -96,7 +96,7 @@ class PurchaseOfferController(ControllerBase):
     @http_post('/place', response=PurchaseOfferOut)
     def place_offer(self, payload: PurchaseOfferPlace):
         current_user = self.context.request.auth
-        product = get_object_or_404(Product, id=payload.product_id)
+        product = get_object_or_404(TeamProduct, id=payload.product_id)
         to_customer = get_object_or_404(User, id=payload.to_customer)
 
         result = PurchaseOffer.place(current_user, to_customer.id, product,  payload.count, payload.price, )
@@ -135,6 +135,7 @@ class PurchaseOfferController(ControllerBase):
         
         check_role(current_user, Role.PLAYER) # DEFAULT: MANUFACTURER
         offer = get_object_or_404(PurchaseOffer, id=offer_id)
+        
         customer = User.objects.get(id=customer_id)
         # BEFORE result = acquire_purchase_offer(current_user.team, offer)
         result = acquire_purchase_offer(customer, offer)

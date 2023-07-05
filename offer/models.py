@@ -10,6 +10,7 @@ from product.models import ProductKit, Product
 from user.models import User, Role
 from team.models import Team # // FIX: ADDED
 from user.utils import check_role
+from store.models import TeamProduct
 
 
 class OfferState(Enum):
@@ -46,7 +47,7 @@ class Offer(models.Model):
 
 class SaleOffer(Offer):
     team = models.ForeignKey(Team, models.CASCADE) # // FIX: ADDED
-    product_kit = models.ForeignKey(ProductKit, on_delete=models.CASCADE)
+    product_kit = models.ForeignKey(ProductKit, on_delete=models.CASCADE, related_name="product_kit")
 
     @staticmethod
     def place(
@@ -68,7 +69,7 @@ class SaleOffer(Offer):
 
 class PurchaseOffer(Offer):
     to_customer = models.IntegerField()
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="product")
+    product = models.ForeignKey(TeamProduct, on_delete=models.CASCADE, related_name="team_product")
     count = models.PositiveIntegerField()
 
     @staticmethod
