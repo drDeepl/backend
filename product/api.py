@@ -95,16 +95,22 @@ class ProductKitController(ControllerBase):
     @http_get('/product-kits/product/{product_kit_id}', response=ProductOut)
     def get_product_from_product_kit(self, product_kit_id: int):
         product_kit = get_object_or_404(ProductKit, id=product_kit_id)
+
         product = product_kit.product
         return product
     
-    
+    @http_get('/product-kits/delete-for-product/{product_id}',)
+    def set_deleted_product_kit_for_related_product(self, product_id: int):
+        product_kits = ProductKit.objects.filter(product_id=product_id)
+        for product_kit in product_kits:
+            product_kit.is_deleted = True
+            product_kit.save()
         
 
     @http_get('/product-kits', response=List[ProductKitOut])
     @paginate
     def list_products(self):
-        qs = ProductKit.objects.all()
+        qs = ProductKit.objects.filter(is_deleted=False)
         return qs
 
     @http_put('/product-kits/{product_kit_id}', response=ProductKitOut, auth=JWTAuth())
@@ -123,6 +129,8 @@ class ProductKitController(ControllerBase):
         product_kit.is_deleted = True
         product_kit.save()
         return product_kit
+
+    
 
     @http_delete('/product-kits/{product_id}', auth=JWTAuth())
     def delete_product_kit(self, product_id: int):

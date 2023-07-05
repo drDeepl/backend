@@ -17,6 +17,7 @@ class ProductIn(ModelSchema):
 
 
 class ProductKitOut(ModelSchema):
+    
     class Config:
         model = ProductKit
         model_fields = ['id', 'product', 'count', 'time', "is_deleted"]
