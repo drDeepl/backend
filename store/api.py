@@ -56,13 +56,13 @@ class StoreController(ControllerBase):
         
         
         teamProduct, createdTeamProduct = TeamProduct.objects.get_or_create(team=team, product=team_product_kit.product_kit.product)
-        if createdTeamProduct:
-            
-            createdTeamProduct.count = team_product_kit.product_kit.count
-            createdTeamProduct.save()
-        else:
-            teamProduct.count += team_product_kit.product_kit.count
-            teamProduct.save()
+        # if createdTeamProduct:
+                     
+        #     createdTeamProduct.count = team_product_kit.product_kit.count
+        #     createdTeamProduct.save()
+        # else:
+        teamProduct.count += team_product_kit.product_kit.count
+        teamProduct.save()
             
         team_product_kit.delete()
         return {'status': 'OK'}
