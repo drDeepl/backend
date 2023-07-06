@@ -32,6 +32,11 @@ class ProductController(ControllerBase):
         qs = Product.objects.filter(is_deleted=False)
         return qs
 
+    @http_get('/products/with/hide', response=List[ProductOut])
+    def list_products_with_hide(self):
+        qs = Product.objects.all()
+        return list(qs)
+
     @http_put('/products/{product_id}', response=ProductOut, permissions=[permissions.IsAuthenticated], auth=JWTAuth())
     def update_product(self, product_id: int, payload: ProductIn):
         check_admin(self.context)
@@ -53,7 +58,8 @@ class ProductController(ControllerBase):
                  permissions=[permissions.IsAuthenticated], auth=JWTAuth())
     def delete_product(self, product_id: int):
         current_user: User = self.context.request.auth
-        check_role(current_user, Role.MANUFACTURER)
+        # check_role(current_user, Role.MANUFACTURER)
+        check_admin(self.context)
         if(product_id == -1):
             products = Product.objects.all()
             for product in products:
