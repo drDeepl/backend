@@ -57,10 +57,10 @@ def acquire_purchase_offer(customer: User, offer: PurchaseOffer) -> PurchaseDone
     print(f"TRADER ACCOUNT {account_trader.account}")
     
     account_transaction = transfer(customer.account, account_trader.account, offer.price)
-    offer.state = OfferState.DONE.value
+    print(f"ACCOUNT TRANSACTION\n{account_transaction}")
     purchase = PurchaseDone.objects.create(offer=offer, transaction=account_transaction)
+    offer.state = OfferState.DONE.value
     offer.save()
-    
     remove_products(team=trader.team, team_product=offer.product, count=offer.count)
     
     return purchase

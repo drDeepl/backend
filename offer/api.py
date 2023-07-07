@@ -136,7 +136,8 @@ class PurchaseOfferController(ControllerBase):
         
         check_role(current_user, Role.PLAYER) # DEFAULT: MANUFACTURER
         offer = get_object_or_404(PurchaseOffer, id=offer_id)
-        
+        print("OFFER GET")
+        print(offer)
         customer = User.objects.get(id=customer_id)
         # BEFORE result = acquire_purchase_offer(current_user.team, offer)
         result = acquire_purchase_offer(customer, offer)
