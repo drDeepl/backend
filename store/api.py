@@ -1,5 +1,5 @@
 from typing import List
-
+from django.db import models
 from ninja_extra import permissions, http_get, pagination
 from ninja_extra.controllers.base import api_controller, ControllerBase
 from ninja_jwt.authentication import JWTAuth
@@ -33,7 +33,7 @@ class StoreController(ControllerBase):
             product.product_name = product.product.name
             return product
                 
-        return list(map(lambda product: get_name_product(product),TeamProduct.objects.filter(team=team_id)))
+        return list(map(lambda product: get_name_product(product),TeamProduct.objects.filter(models.Q(team=team_id) & ~models.Q(count=0))))
         # return get_all_products(team_id)
 
     @http_get('{team_id}/product-kits/list', response=List[ProductKitOut])

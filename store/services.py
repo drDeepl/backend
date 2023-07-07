@@ -83,7 +83,8 @@ def remove_products(team: Team, team_product: TeamProduct, count: int):
     team_product.count -= count
     team_product.save()
     if team_products == count:
-        team_product.delete()
+        team_product.count = 0
+        team_product.save()
     
     return
 
