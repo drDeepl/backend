@@ -1,7 +1,7 @@
 from ninja import ModelSchema
 
 from offer.models import PurchaseDone, SaleDone, PurchaseOffer, SaleOffer
-
+from product.models import Product
 
 
 
@@ -21,9 +21,11 @@ class SaleOfferPlace(ModelSchema):
 
 
 class PurchaseOfferOut(ModelSchema):
+    
     class Config:
         model = PurchaseOffer
         model_fields = ['id', 'trader', 'price', 'timestamp', 'state', 'product', 'count', 'to_customer']
+        
 
 
 class PurchaseOfferPlace(ModelSchema):

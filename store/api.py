@@ -17,6 +17,14 @@ from ninja.pagination import paginate
 
 @api_controller('/store', tags=['Store'], permissions=[permissions.IsAuthenticated], auth=JWTAuth())
 class StoreController(ControllerBase):
+    
+    @http_get('team-product/{team_product_id}', response=StoreProductOut)
+    def get_team_product(self, team_product_id: int):
+        team_product = TeamProduct.objects.get(id=team_product_id)
+        print(f"TEAM PRODUCT {team_product}")
+        team_product.product_name = team_product.product.name
+        return team_product
+
     @http_get('{team_id}/products/list', response=List[StoreProductOut])
     @paginate
     def list_products(self, team_id: int):

@@ -28,6 +28,9 @@ def find_done_sale_offers() -> List[SaleOffer]:
     # return list(Paginator(offers_sale_done, count_elements_on_page).get_page(page))
     return list(SaleOffer.objects.filter(state=OfferState.DONE.value))
     
+def set_purchase_offer_product(purchase_offer: PurchaseOffer) -> PurchaseOffer:
+    product = purchase_offer.product.product
+    purchase_offer.product = product
 def find_done_purchase_offers() -> List[PurchaseOffer]:
     return list(PurchaseOffer.objects.filter(state=OfferState.DONE.value))
 
